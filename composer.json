@@ -17,5 +17,9 @@
     "require": {
         "php": ">=8.0",
         "death_satan/str-helpers": "^1.0"
+
+    },
+    "require-dev": {
+        "symfony/var-dumper": "^6.0"
     }
 }

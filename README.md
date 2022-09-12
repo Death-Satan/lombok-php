@@ -15,6 +15,7 @@ composer require death_satan/lombok -vvv
 - Data (为所有的属性生成对应的Get,Set方法)
 - Getter （单独的为一个属性生成Get方法)
 - Setter (单独的为一个属性生成Set方法)
+- RequiredArgsConstructor （为所有没有默认值的属性生成__construct方法)
 - 更多待实现
 ---
 

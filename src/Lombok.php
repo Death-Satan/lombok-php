@@ -19,7 +19,7 @@ trait Lombok
         // 获取到传入的值
         $this->__handle_lombok__();
         $this->__handle_call__(__FUNCTION__,func_get_args());
-        $this->__handle_call__(NonNull::NAME,[]);
+        $this->__handle_call__(MethodConstant::NONNULL,[]);
     }
 
     public function __call(string $name, array $arguments)
@@ -54,7 +54,7 @@ trait Lombok
         if ($result===$params)
         {
             throw new \RuntimeException(sprintf('类%s中不能有效处理%s方法',...[
-                static::class,$params[0]??''
+                static::class,$params[0]??MethodConstant::CONSTRUCT
             ]));
         }
         return $result;
@@ -62,6 +62,7 @@ trait Lombok
 
     // lombok内置处理数组
     protected array $lombok_call = [];
+
 
     /**
      * @var ReflectionAttribute[] $reflection_class_attributes
@@ -129,7 +130,7 @@ trait Lombok
             }
         }
         // 属性注解处理
-        $this->reflection_properties = $properties_reflections = $reflection->getProperties();
+        $properties_reflections = $reflection->getProperties();
         foreach ($properties_reflections as $properties_reflection)
         {
             $properties_name = $properties_reflection->getName();
@@ -138,6 +139,7 @@ trait Lombok
             {
                 continue;
             }
+            $this->reflection_properties[] = $properties_reflection;
             $properties_attributes = $properties_reflection->getAttributes();
             foreach ($properties_attributes as $properties_attribute)
             {
