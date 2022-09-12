@@ -4,9 +4,13 @@
 namespace DeathSatan\Lombok;
 
 
+use Attribute;
 use Closure;
 use DeathSatan\Lombok\Attributes\BaseAttributes;
 use DeathSatan\Lombok\Attributes\NonNull;
+use ReflectionAttribute;
+use ReflectionClass;
+use ReflectionProperty;
 
 trait Lombok
 {
@@ -59,6 +63,24 @@ trait Lombok
     // lombok内置处理数组
     protected array $lombok_call = [];
 
+    /**
+     * @var ReflectionAttribute[] $reflection_class_attributes
+     */
+    protected array $reflection_class_attributes = [];
+
+    /**
+     * @var ReflectionAttribute[] $reflection_properties_attributes
+     */
+    protected array $reflection_properties_attributes = [];
+
+
+    protected ReflectionClass $reflection_class;
+
+    /**
+     * @var ReflectionProperty[] $reflection_properties
+     */
+    protected array $reflection_properties;
+
     protected function __handle_closure__($closure_data)
     {
         foreach ($closure_data as $i => $closure_datum)
@@ -68,34 +90,65 @@ trait Lombok
     }
 
     /**
+     * 不需要处理的数据
+     * @return string[]
+     */
+    protected function getNotHandleProperties():array
+    {
+        return [
+            'reflection_class',
+            'reflection_properties',
+            'reflection_properties_attributes',
+            'reflection_class_attributes',
+            'lombok_call'
+        ];
+    }
+
+    /**
      * 注解处理
      */
     protected function __handle_attributes__()
     {
         // 类注解处理
-        $reflection = new \ReflectionClass(static::class);
+        $this->reflection_class = $reflection = new ReflectionClass(static::class);
         $class_attributes = $reflection->getAttributes();
         foreach ($class_attributes as $class_attribute)
         {
             $class_attribute_object = $class_attribute->newInstance();
+
+            // 将类注解反射存储一下
+            $this->reflection_class_attributes = array_merge(
+             $this->reflection_class_attributes,
+             [$class_attribute_object]
+            );
+
             if ($class_attribute_object instanceof BaseAttributes)
             {
-                $call_closure_data = $class_attribute_object->handle(\Attribute::TARGET_CLASS);
+                $call_closure_data = $class_attribute_object->handle(Attribute::TARGET_CLASS);
                 $this->__handle_closure__($call_closure_data);
             }
         }
         // 属性注解处理
-        $properties_reflections = $reflection->getProperties();
+        $this->reflection_properties = $properties_reflections = $reflection->getProperties();
         foreach ($properties_reflections as $properties_reflection)
         {
             $properties_name = $properties_reflection->getName();
+            // 不需要处理的数据直接抛出去
+            if (in_array($properties_name,$this->getNotHandleProperties()))
+            {
+                continue;
+            }
             $properties_attributes = $properties_reflection->getAttributes();
             foreach ($properties_attributes as $properties_attribute)
             {
                 $properties_attribute_object = $properties_attribute->newInstance();
+                // 将属性注解反射进行存储一下
+                $this->reflection_properties_attributes[$properties_name][] =
+                    $properties_attribute_object;
+
                 if ($properties_attribute_object instanceof BaseAttributes)
                 {
-                    $call_closure_data = $properties_attribute_object->handle(\Attribute::TARGET_PROPERTY,[
+                    $call_closure_data = $properties_attribute_object->handle(Attribute::TARGET_PROPERTY,[
                         'property_name'=>$properties_name
                     ]);
                     $this->__handle_closure__($call_closure_data);
