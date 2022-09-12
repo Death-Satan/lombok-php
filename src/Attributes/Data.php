@@ -5,6 +5,7 @@ namespace DeathSatan\Lombok\Attributes;
 
 use Attribute;
 use DeathSatan\Lombok\Lombok;
+use DeathSatan\Lombok\MethodConstant;
 use DeathSatan\StrHelpers\Helpers as Str;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
@@ -35,7 +36,7 @@ class Data extends BaseAttributes
             };
             return [
                 [
-                    '__call',$__call_closure
+                    MethodConstant::CALL,$__call_closure
                 ]
             ];
         }

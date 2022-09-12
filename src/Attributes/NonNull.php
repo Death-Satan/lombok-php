@@ -4,12 +4,11 @@
 namespace DeathSatan\Lombok\Attributes;
 
 use Attribute;
+use DeathSatan\Lombok\MethodConstant;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class NonNull extends BaseAttributes
 {
-    public const NAME = 'NonNull';
-
     public function handle(int $use_type = Attribute::TARGET_PROPERTY,array $extras = []): array
     {
         $property_name = $extras['property_name'];
@@ -23,7 +22,7 @@ class NonNull extends BaseAttributes
         };
         return [
             [
-                self::NAME,$__construct
+                MethodConstant::NONNULL,$__construct
             ]
         ];
     }

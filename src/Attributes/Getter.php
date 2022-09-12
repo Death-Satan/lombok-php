@@ -4,6 +4,7 @@
 namespace DeathSatan\Lombok\Attributes;
 
 use Attribute;
+use DeathSatan\Lombok\MethodConstant;
 use DeathSatan\StrHelpers\Helpers as Str;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
@@ -37,7 +38,7 @@ class Getter extends BaseAttributes
             };
             return [
                 [
-                    '__call',$closure
+                    MethodConstant::CALL,$closure
                 ]
             ];
         }
