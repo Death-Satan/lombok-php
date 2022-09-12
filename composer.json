@@ -1,0 +1,21 @@
+{
+    "name": "death_satan/lombok",
+    "description": "Implementing Lombok similar to Java with PHP",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "DeathSatan\\Lombok\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "DeathSatan",
+            "email": "2771717608@qq.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "death_satan/str-helpers": "^1.0"
+    }
+}
