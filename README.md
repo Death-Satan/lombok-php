@@ -1,6 +1,14 @@
 # Implementing Lombok similar to Java with PHP
 - 用PHP实现类似Java的Lombok
 
+# 安装
+## composer
+---
+```shell
+composer require death_satan/lombok -vvv
+```
+---
+
 # 已实现注解
 
 ---
