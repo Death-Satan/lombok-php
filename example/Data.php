@@ -3,14 +3,12 @@
 use DeathSatan\Lombok\Attributes as Lombok;
 use DeathSatan\Lombok\Lombok as Helper;
 require_once __DIR__.'/../vendor/autoload.php';
-#[Lombok\Data]
-#[Lombok\RequiredArgsConstructor]
+#[Lombok\AllArgsConstructor]
 class Demo{
     use Helper;
     public string $user_name;
-    public $demo;
+    public ?string $demo;
     public int $age;
 }
 
-$demo = new Demo('123',12);
-dump($demo);
+$demo = new Demo('123',null,123);

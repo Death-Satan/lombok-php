@@ -34,18 +34,14 @@ class RequiredArgsConstructor extends BaseAttributes
             foreach ($required_vars as $key => $value)
             {
                 $current_value = $vars[$i];
-                $get_type =gettype($current_value);
-                if ($get_type === 'object')
-                {
-                    $get_type = get_class($get_type);
-                }
+                $get_type =Helpers::get_type($current_value);
                 if (!Helpers::checkType($get_type,$value->getName())) {
                     throw new RuntimeException(sprintf(
                         '类%s中第%d参数类型应该为%s,现在传入的类型为%s',
                                get_class($this),
                                 $i,
                                 $value->getName(),
-                                gettype($current_value)
+                                $get_type
                     ));
                 }
                 $this->{$key} = $current_value;
